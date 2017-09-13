@@ -2,7 +2,7 @@
 import json
 import hashlib
 import datetime
-import urllib2
+from urllib.request import urlopen, Request, HTTPError
 import StringIO
 from urllib import urlencode
 from xml.etree import ElementTree
@@ -120,13 +120,13 @@ class Client(object):
     @classmethod
     def _exec_request(cls, url, data, method='GET'):
         if method == 'GET':
-            request = urllib2.Request(url + '?' + urlencode(data))
+            request = Request(url + '?' + urlencode(data))
         elif method == 'POST':
-            request = urllib2.Request(url, data=data)
+            request = Request(url, data=data)
         else:
             raise NotImplementedError('Unknown method "%s"' % method)
 
-        return urllib2.urlopen(request).read()
+        return urlopen(request).read()
 
     @classmethod
     def _parse_xml(cls, data):
@@ -333,7 +333,7 @@ class Client(object):
 
         try:
             self._exec_xml_request(self.CALL_COURIER_URL, call_courier_element)
-        except urllib2.HTTPError:
+        except HTTPError:
             return False
         else:
             return True
