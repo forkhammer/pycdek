@@ -170,7 +170,7 @@ class Client(object):
             'goods': goods,
         }
 
-        return json.loads(cls._exec_request(cls.CALCULATOR_URL, json.dumps(params).encode('utf-8'), 'POST'))
+        return json.loads(cls._exec_request(cls.CALCULATOR_URL, json.dumps(params).encode('utf-8'), 'POST').decode('utf-8'))
 
     @classmethod
     def get_delivery_points(cls, city_id=None):
