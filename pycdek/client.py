@@ -3,7 +3,7 @@ import json
 import hashlib
 import datetime
 from urllib.request import urlopen, Request, HTTPError
-import StringIO
+from io import StringIO
 from urllib import urlencode
 from xml.etree import ElementTree
 from abc import ABCMeta, abstractmethod
