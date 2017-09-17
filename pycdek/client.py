@@ -151,7 +151,7 @@ class Client(object):
         return result
 
     @classmethod
-    def get_shipping_cost(cls, sender_city_id, receiver_city_id, tariffs, goods):
+    def get_shipping_cost(cls, sender_city_id, receiver_city_id, tariffs, goods, login=None, password=None):
         """
         Возвращает информацию о стоимости и сроках доставки
         Для отправителя и получателя обязателен один из параметров: *_city_id или *_city_postcode внутри *_city_data
@@ -161,14 +161,19 @@ class Client(object):
         :param goods: список товаров
         :returns dict
         """
+        dateExecute = datetime.date.today().isoformat()
         params = {
             'version': '1.0',
-            'dateExecute': datetime.date.today().isoformat(),
+            'dateExecute': dateExecute,
             'senderCityId': sender_city_id,
             'receiverCityId': receiver_city_id,
             'tariffList': [{'priority': -i, 'id': tariff} for i, tariff in enumerate(tariffs, 1)],
             'goods': goods,
         }
+
+        if login and password:
+            params['authLogin'] = account
+            params['secure'] = hashlib.md5('%s&%s' % (dateExecute, secure)).hexdigest()
 
         return json.loads(cls._exec_request(cls.CALCULATOR_URL, json.dumps(params).encode('utf-8'), 'POST').decode('utf-8'))
 
