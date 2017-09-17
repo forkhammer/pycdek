@@ -173,7 +173,7 @@ class Client(object):
 
         if login and password:
             params['authLogin'] = login
-            params['secure'] = hashlib.md5('%s&%s' % (dateExecute, password)).hexdigest()
+            params['secure'] = hashlib.md5(('%s&%s' % (dateExecute, password)).encode('utf-8')).hexdigest()
 
         return json.loads(cls._exec_request(cls.CALCULATOR_URL, json.dumps(params).encode('utf-8'), 'POST').decode('utf-8'))
 
